@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Healthcare at Home</title>
+<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+<style>
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: #f4f8fb;
+    color: #333;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    border-bottom: 2px solid #0077b6;
+    background: #0077b6;
+    color: white;
+  }
+  header img {
+    height: 50px;
+    width: auto;
+  }
+  header .login-btn {
+    background: #00b4d8;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .chat-container {
+    width: 80%;
+    max-width: 900px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin: 30px auto;
+  }
+
+  .chat-header {
+    background: #0077b6;
+    color: white;
+    padding: 14px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  #chat {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #chat p {
+    margin: 8px 0;
+    padding: 10px 14px;
+    border-radius: 10px;
+    max-width: 75%;
+    word-wrap: break-word;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  #chat p b {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 11px;
+    color: #555;
+  }
+
+  .msg-user {
+    background: #0077b6;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 0;
+  }
+  .msg-ai {
+    background: #e0f7fa;
+    color: black;
+    align-self: flex-start;
+    border-bottom-left-radius: 0;
+  }
+
+  .chat-input {
+    display: flex;
+    padding: 12px;
+    border-top: 1px solid #ddd;
+    background: #f4f8fb;
+  }
+  .chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #0077b6;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  .chat-input button {
+    margin-left: 10px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    background: #0077b6;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .chat-input button:hover {
+    background: #0096c7;
+  }
+
+  .upload-section {
+    padding: 10px;
+    text-align: center;
+    border-top: 1px solid #ddd;
+    background: #f4f8fb;
+  }
+  .upload-section input {
+    margin-bottom: 6px;
+  }
+  .upload-section button {
+    background: #0077b6;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+  }
+  .upload-section button:hover {
+    background: #0096c7;
+  }
+
+  .about, .faq {
+    max-width: 85%;
+    margin: 40px auto;
+    background: white;
+    padding: 22px 28px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .about h2, .faq h2 {
+    color: #0077b6;
+    margin-bottom: 12px;
+  }
+  .faq-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .faq-box {
+    padding: 18px;
+    border-radius: 8px;
+    background: #f4f8fb;
+    box-shadow: 0 0 8px rgba(0,119,182,0.2);
+  }
+  .faq-box h4 {
+    color: #0077b6;
+    margin-bottom: 10px;
+  }
+
+  footer {
+    background-color: #0077b6;
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    font-size: 0.95rem;
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="asets/images.jpeg" alt="HealthCare" />
+  <a href="#" class="login-btn">Sign In</a>
+</header>
+
+<div class="chat-container">
+  <div class="chat-header">Healthcare at Home - Symptom Checker</div>
+
+  <div id="chat">
+    <p class="msg-ai"><b>System:</b> Enter your symptoms below and get AI guidance.</p>
+  </div>
+
+  <div class="chat-input">
+    <input id="symptomInput" placeholder="Describe your symptoms..." />
+    <button onclick="sendSymptom()">Submit</button>
+  </div>
+
+ 
+</div>
+
+<div class="about">
+  <h2>About Healthcare at Home</h2>
+  <p>
+    Healthcare at Home provides instant AI-based guidance for your health symptoms.
+    Enter your symptoms or upload relevant images to get suggestions and possible causes.
+    Always consult a doctor for professional advice.
+  </p>
+</div>
+
+<div class="faq">
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-grid">
+    <div class="faq-box">
+      <h4>Q: Is this a replacement for a doctor?</h4>
+      <p>A: No. AI provides guidance only. Always consult a physician for treatment.</p>
+    </div>
+    <div class="faq-box">
+      <h4>Q: Can I upload images?</h4>
+      <p>A: Yes, upload images like skin rashes or other symptoms for AI analysis.</p>
+    </div>
+    <div class="faq-box">
+      <h4>Q: Is my data private?</h4>
+      <p>A: Yes, all data is processed securely.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 Healthcare at Home | AI Symptom Checker
+</footer>
+
+<script>
+const socket = io("http://localhost:5000");
+
+function addMessage(content, type="ai") {
+  const chat = document.getElementById("chat");
+  chat.innerHTML += `<p class="msg-${type}">${content}</p>`;
+  chat.scrollTop = chat.scrollHeight;
+}
+
+async function sendSymptom() {
+  const symptom = document.getElementById("symptomInput").value.trim();
+  if (!symptom) return;
+  addMessage(`<b>You:</b> ${symptom}`, "user");
+  document.getElementById("symptomInput").value = "";
+
+  addMessage("<b>AI:</b> Analyzing...", "ai");
+
+  try {
+    const res = await fetch("http://localhost:5000/symptom", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ symptom })
+    });
+    const data = await res.json();
+    addMessage(`<b>AI:</b> ${data.reply}`, "ai");
+  } catch (err) {
+    console.error(err);
+    addMessage("<b>AI:</b> ⚠️ Failed to contact AI service.", "ai");
+  }
+}
+
+async function uploadImage() {
+  const fileInput = document.getElementById("imageInput");
+  if (!fileInput.files.length) return alert("Please select an image!");
+
+  const formData = new FormData();
+  formData.append("image", fileInput.files[0]);
+
+  try {
+    const res = await fetch("http://localhost:5000/upload", {
+      method: "POST",
+      body: formData
+    });
+    const data = await res.json();
+    if (data.error) return addMessage(`<b>System:</b> ${data.error}`, "ai");
+
+    addMessage(`<b>You (image):</b><br><img src="${data.imageUrl}" width="150"/>`, "user");
+    if (data.reply) addMessage(`<b>AI:</b> ${data.reply}`, "ai");
+  } catch (err) {
+    console.error(err);
+    addMessage("<b>AI:</b> ⚠️ Failed to upload image.", "ai");
+  }
+}
+</script>
+
+</body>
+</html>
