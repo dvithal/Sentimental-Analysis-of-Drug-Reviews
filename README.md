@@ -28,11 +28,24 @@ The project uses six dataset variants derived from three primary datasets:
 - Sentiment labels derived from numerical scores  
 - SMOTE applied to rebalance the dataset
 
+  
+<img width="780" height="304" alt="image" src="https://github.com/user-attachments/assets/c7d32201-a638-4bb8-b12d-1a7496c77be9" />
+
+The above image shows the class distribution for the WebMD dataset before and after SMOTE 
+algorithm was applied on the dataset, with the dataset becoming more balanced after SMOTE algorithm was applied on it,
+
+
+
 ### UCI DrugLib Dataset
 - Rows: 4,143  
 - Selected attributes: rating, benefitsReview, sideEffectsReview, commentsReview  
 - Sentiment derived from rating  
 - SMOTE applied to equalize class distribution
+
+
+<img width="827" height="328" alt="image" src="https://github.com/user-attachments/assets/5642700b-4e57-4a8d-8dd0-6f6094529992" />
+
+The above image shows the class distribution for the UCI drugLib dataset before and after SMOTE algorithm was applied on the dataset, with the dataset becoming more balanced after SMOTE algorithm was applied on it.
 
 ### Combined Dataset
 - Rows: 363,842  
@@ -40,6 +53,9 @@ The project uses six dataset variants derived from three primary datasets:
 - Merging improves generalization and linguistic diversity  
 - SMOTE applied for balanced learning
 
+<img width="826" height="331" alt="image" src="https://github.com/user-attachments/assets/b39e3991-d300-4906-8736-febf1d15d109" />
+
+The above image shows the class distribution for the UCI drugLib dataset before and after SMOTE algorithm was applied on the dataset, with the dataset becoming more balanced after SMOTE algorithm was applied on it.
 ---
 
 ## Methodology
